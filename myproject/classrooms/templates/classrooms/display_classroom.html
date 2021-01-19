@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="list_assignment_wrapper" > 
+    <div class = list_top_container> 
+        <div class="main_heading">
+            <div class="heading"> Your Classroom Assignments</div>
+            {% if teacherLoggedIn %}
+                <div style="display: flex;">
+                    <a class="add_assignment_btn" href="{{ url_for('classrooms.add_classroom_assignments', classroom_id = classroom_id) }}">Add Assignments for this class <small><i class="fas fa-plus"></i></small></a>
+                    <a class="add_assignment_btn" style="background-color: rgb(75, 75, 75);" href="{{ url_for('classrooms.display_class_students', classroom_id = classroom_id)}}"> Your Students</a>
+                </div>         
+            {% else %}
+                {% if inClass %}
+                    <p style="color:green; font-weight:700; font-size:22px; margin-left: 5px">Joined</p>
+                {% else %}
+                    <form method = "POST" class="">
+                        {{ form.hidden_tag()}}
+                        {{ form.submit(class = "join_classroom_btn") }}
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    </div >
+    <hr style="margin-bottom:25px; height:2px">
+    <div class="display_assignment">
+        {% for assignment in available_assignments %}
+                {% if current_user.is_authenticated %}
+                    <a class= "assignment_box" href="{{ url_for('classrooms.solve_classroom_assignment', classroom_id = classroom_id,assignment_id = assignment.id) }}"> 
+                {% else %}
+                    <a class= "assignment_box" href="{{ url_for('classrooms.delete_classroom_assignments', classroom_id = classroom_id,assignment_id = assignment.id) }}"> 
+                {% endif %}
+                <div class="assignment_name">
+                    {{assignment.assignment_name}}
+                </div>
+                <div class="teacher_description">
+                    Due: {{ all_deadline_days[loop.index0] }} at {{ all_deadline_dates[loop.index0] }}
+                </div>
+                <div class="rate_review">
+                    <div class = "rating"> {{"%.1f"|format(assignment.assignment_rating)}}</div>
+                    <div class = "reviews"> ({{assignment.assignment_no_of_reviews}}) </div>
+                </div>
+                <div class="price">Free</div>
+                <div class="status">New</div>
+            </a>
+
+        {% endfor %}
+    </div>
+    
+
+</div>   
+
+{% endblock content %}

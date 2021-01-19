@@ -1,18 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="POST">  
+<form method="POST"> 
    <div class="attempt_page_wrapper">
 
         <div class="attempt_page_heading">
             <h1>{{assignment_data[0].assignment.assignment_name}}</h1>
             <div class = "delete_and_points"> 
-                <p style="font-weight: bold">Total Points: {{total_points}}</p>
-                {{ form.submit( class = "delete_assignment_btn")}} 
+                <p style="font-weight: bold; width:200px;">Total Points: {{total_points}}</p>
+                <div>
+                    <a href="#down-here"> Student's Result</a>
+                    {{ form.submit( class = "delete_assignment_btn")}} 
+                </div>
+                
             </div>
-            <hr style = "height:5px;">
+            <hr style = "height:1px; margin:0">
         </div>
 
         <div class="attempt_page_solving">
+            
                 {{ form.hidden_tag() }}
                 <!-- Outer Loop -->
                 
@@ -33,7 +38,7 @@
                         </div>
                         <div class="ap_options"></p>
                            <ul>
-                               <li  >{{ assignment.choice1 }}</li>
+                               <li>{{ assignment.choice1 }}</li>
                                <li>{{ assignment.choice2 }}</li>
                                <li>{{ assignment.choice3 }}</li>
                                <li>{{ assignment.choice4 }}</li>
@@ -47,8 +52,29 @@
                     
                 {% endfor %}
 
+                 
+                 
+            </form>
         </div>
- 
+
+        <div class="display_class_student_wrapper alternate" id="down-here">
+            <div class="heading">
+                Student's who attempted this assignment
+                <hr style="height: 1px; margin:0; margin-top:10px">
+            </div>
+            <div class="students_list">
+                <ol>
+                    {% for result in student_results %}
+                        <li>
+                            <p> {{result.student.student_uname}} {{result.student.student_fname|capitalize}} {{result.student.student_lname|capitalize}} {{ "-"}} {{result.points }}{{"/"}}{{total_points}}</p>
+                        </li>
+                    {% endfor %}
+                    
+                </ol>
+    
+            </div>
+        </div>
+
    </div>
-</form>  
+</form>   
 {% endblock %}
